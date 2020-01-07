@@ -1,23 +1,20 @@
 package com.hanifkf.daggerretrofitrxjava
 
-import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.hanifkf.daggerretrofitrxjava.model.Persons
+import com.hanifkf.daggerretrofitrxjava.adapter.MainAdapter
+import com.hanifkf.daggerretrofitrxjava.adapter.OnClickItemKu
 import com.hanifkf.daggerretrofitrxjava.model.Result
 import com.hanifkf.daggerretrofitrxjava.network.ApiInterface
 import com.hanifkf.daggerretrofitrxjava.viewmodel.PersonViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnClickItemKu {
 
     @Inject
     lateinit var mApiInterface : ApiInterface
@@ -34,7 +31,8 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
         data = mutableListOf()
-        mainAdapter = MainAdapter(this,data)
+        mainAdapter =
+            MainAdapter(this, data,this)
 
         rec_person.layoutManager = LinearLayoutManager(this)
         rec_person.adapter = mainAdapter
@@ -44,7 +42,18 @@ class MainActivity : AppCompatActivity() {
             mainAdapter.notifyDataSetChanged()
 
         })
+        personViewModel.getStatus().observe(this, Observer {
+            Log.d("STATUS", it)
+        })
 
+    }
+
+    override fun onClickItemKu(result: Result) {
+        Toast.makeText(this, result.firstName,Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onLongClick(result: Result) {
+        Toast.makeText(this, "Long "+result.firstName,Toast.LENGTH_SHORT).show()
     }
 
 }

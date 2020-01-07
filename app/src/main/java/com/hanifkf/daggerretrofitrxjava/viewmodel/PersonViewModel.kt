@@ -18,23 +18,30 @@ import javax.inject.Inject
 
 class PersonViewModel @Inject constructor(private val apiInterface: ApiInterface) : ViewModel() {
     var count : MutableLiveData<List<Result>> = MutableLiveData()
-
+    var status : MutableLiveData<String> = MutableLiveData()
 
     @SuppressLint("CheckResult")
     fun getPersons() : LiveData<List<Result>>{
+        status.value = "Mulai Load Data"
         apiInterface.getPersons().observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe(this::handleResponse, this::handleError)
         return count
     }
 
+    fun getStatus() : LiveData<String>{
+        return status
+    }
+
     private fun handleResponse(persons: Persons) {
 
         count.value = persons.result
+
+        status.value = "Selesai Load Data"
     }
 
     private fun handleError(error: Throwable) {
-
+        status.value = "Selesai Load Data Dengan Error"
         Log.d("ERR", error.localizedMessage)
     }
 }
