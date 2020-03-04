@@ -9,7 +9,7 @@ import com.hanifkf.daggerretrofitrxjava.R
 import com.hanifkf.daggerretrofitrxjava.model.Result
 import kotlinx.android.synthetic.main.item_movie.view.*
 
-class MainAdapter(private val context: Context, private val list: List<Result>, private val onClickItemKu: OnClickItemKu) : RecyclerView.Adapter<MainAdapter.ViewHolder>(){
+class MainAdapter(private val context: Context, private val list: List<Result>, private val listener : (Result)->Unit, private val listenerLong : (Result)->Unit) : RecyclerView.Adapter<MainAdapter.ViewHolder>(){
 
 
 
@@ -25,17 +25,17 @@ class MainAdapter(private val context: Context, private val list: List<Result>, 
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindItem(list[position], onClickItemKu)
+        holder.bindItem(list[position], listener, listenerLong)
     }
 
     class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
-        fun bindItem(result: Result, onClickItemKu: OnClickItemKu){
+        fun bindItem(result: Result, listener: (Result) -> Unit, listenerLong: (Result) -> Unit){
             itemView.name_text.text = result.firstName +" "+result.lastName
             itemView.setOnClickListener {
-                onClickItemKu.onClickItemKu(result)
+                listener(result)
             }
             itemView.setOnLongClickListener {
-                onClickItemKu.onLongClick(result)
+                listenerLong(result)
                 true
             }
         }
