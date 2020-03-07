@@ -5,12 +5,14 @@ import com.hanifkf.daggerretrofitrxjava.model.PersonParams
 import com.hanifkf.daggerretrofitrxjava.model.Persons
 import com.hanifkf.daggerretrofitrxjava.network.ApiInterface
 import com.hanifkf.daggerretrofitrxjava.network.ApiObserver
+import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class MainRepository  @Inject constructor(private val apiInterface: ApiInterface){
+class MainRepository(private val apiInterface: ApiInterface){
     private val compositeDisposable = CompositeDisposable()
     fun getPersons(onResult:(Persons)->Unit, onError : (Throwable) -> Unit){
         apiInterface.getPersons().observeOn(AndroidSchedulers.mainThread())
@@ -28,6 +30,27 @@ class MainRepository  @Inject constructor(private val apiInterface: ApiInterface
     }
 
     fun createPerson(params: PersonParams, onResult:(CreateResponse)->Unit, onError : (Throwable) -> Unit){
+//        apiInterface.createPersons(params.firstName,params.lastName).observeOn(AndroidSchedulers.mainThread())
+//            .subscribeOn(Schedulers.io())
+//            .subscribe(object : Observer<CreateResponse>{
+//                override fun onComplete() {
+//
+//                }
+//
+//                override fun onSubscribe(d: Disposable) {
+//
+//                }
+//
+//                override fun onNext(t: CreateResponse) {
+//                    onResult(t)
+//
+//                }
+//
+//                override fun onError(e: Throwable) {
+//                    onError(e)
+//                }
+//
+//            })
         apiInterface.createPersons(params.firstName,params.lastName).observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe(object : ApiObserver<CreateResponse>(compositeDisposable){

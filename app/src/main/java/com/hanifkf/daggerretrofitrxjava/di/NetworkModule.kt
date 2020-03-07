@@ -1,8 +1,8 @@
 package com.hanifkf.daggerretrofitrxjava.di
 
 import com.google.gson.Gson
-import com.hanifkf.daggerretrofitrxjava.Coba
 import com.hanifkf.daggerretrofitrxjava.network.ApiInterface
+import com.hanifkf.daggerretrofitrxjava.repository.MainRepository
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -48,7 +48,6 @@ class NetworkModule{
     @Provides
     @Singleton
     fun provideRetrofitBuilder(gson: Gson, okHttpClient: OkHttpClient, rxJava2CallAdapterFactory: RxJava2CallAdapterFactory) : Retrofit.Builder{
-        okHttpClient
         return Retrofit.Builder()
             .baseUrl("http://192.168.1.9:3030")
             .addConverterFactory(GsonConverterFactory.create(gson))
@@ -64,8 +63,8 @@ class NetworkModule{
 
     @Provides
     @Singleton
-    fun provideCoba() : Coba{
-        return Coba("Hanif Khoirul")
+    fun provideRepository(apiInterface: ApiInterface) : MainRepository{
+        return  MainRepository(apiInterface)
     }
 
 }

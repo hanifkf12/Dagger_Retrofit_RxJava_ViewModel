@@ -24,14 +24,13 @@ class PersonViewModel @Inject constructor(private val repository: MainRepository
     var count : MutableLiveData<List<Result>?> = MutableLiveData()
     var status : MutableLiveData<Boolean> = MutableLiveData()
 
-    @SuppressLint("CheckResult")
     fun getPersons(){
         status.value = true
         repository.getPersons({
             count.value = it.result
             status.value = false
         },{
-            Log.e("ERRR", it.message)
+            Log.e("ERRR", it.message!!)
         })
     }
 
@@ -41,7 +40,7 @@ class PersonViewModel @Inject constructor(private val repository: MainRepository
             getPersons()
             status.value = false
         },{
-            Log.e("ERRR", it.message)
+            Log.e("ERRR", it.message!!)
         })
     }
 

@@ -16,12 +16,9 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var mApiInterface : ApiInterface
+
     @Inject
     lateinit var personViewModel : PersonViewModel
-    @Inject
-    lateinit var coba: Coba
 
     private lateinit var mainAdapter: MainAdapter
 
@@ -53,9 +50,8 @@ class MainActivity : AppCompatActivity() {
         })
 
         personViewModel.getPersons()
-        coba.cetak()
         fab.setOnClickListener {
-            var params = PersonParams("Hanif ff ", "heheasdasd")
+            var params = PersonParams("Hanifa Khoirunnisa ", "KKK")
             personViewModel.createPerson(params)
         }
 
